@@ -13,7 +13,6 @@ import com.example.basketballgame.logic.GameListener
 import com.example.basketballgame.logic.GameTimer
 import com.example.basketballgame.utilities.SignalManager
 
-
 class MainActivity : AppCompatActivity(), GameListener {
 
     private lateinit var player: ImageView
@@ -73,7 +72,10 @@ class MainActivity : AppCompatActivity(), GameListener {
     private fun updatePlayerPosition() {
         val screenWidth = resources.displayMetrics.widthPixels
         val laneWidth = screenWidth / 3
-        player.x = (gameController.playerPosition * laneWidth + laneWidth / 2 - player.width / 2).toFloat()
+
+        val params = player.layoutParams as FrameLayout.LayoutParams
+        params.leftMargin = gameController.playerPosition * laneWidth + laneWidth / 2 - player.width / 2
+        player.layoutParams = params
     }
 
     override fun updateObstacles(matrix: Array<IntArray>) {
@@ -96,12 +98,10 @@ class MainActivity : AppCompatActivity(), GameListener {
 
                     obstacle.layoutParams = params
                     obstaclesLayer.addView(obstacle)
-
                 }
             }
         }
     }
-
 
     override fun updateLives(lives: Int) {
         for (i in hearts.indices) {
@@ -110,6 +110,8 @@ class MainActivity : AppCompatActivity(), GameListener {
     }
 
     private fun restartGame() {
+        SignalManager.getInstance().toast(getString(R.string.toast_new_game_started))
+
         gameOverText.visibility = View.GONE
         gameController = GameController(this)
         gameTimer = GameTimer(Constants.TIMER_INTERVAL) {
@@ -121,8 +123,6 @@ class MainActivity : AppCompatActivity(), GameListener {
             updatePlayerPosition()
         }
         gameTimer.start()
-
-        SignalManager.getInstance().toast(getString(R.string.toast_new_game_started))
     }
 
 
@@ -134,5 +134,4 @@ class MainActivity : AppCompatActivity(), GameListener {
             restartGame()
         }, 3000)
     }
-
 }
