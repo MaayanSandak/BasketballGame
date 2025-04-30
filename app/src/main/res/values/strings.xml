@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Basketball Game</string>
+
+    <string name="desc_move_left">Move left</string>
+    <string name="desc_move_right">Move right</string>
+    <string name="desc_heart">Heart icon representing a life</string>
+    <string name="desc_player">Basketball player character</string>
+    <string name="desc_background">Basketball court background</string>
+    <string name="toast_new_game_started">New Game Started!</string>
+    <string name="game_over">Game Over</string>
+    <string name="toast_lost_life">You lose the ball!</string>
+</resources>
+

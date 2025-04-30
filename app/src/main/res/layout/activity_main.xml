@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/basketball_court"
+        android:contentDescription="@string/desc_background"/>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#30FFFFFF" />
+
+    <FrameLayout
+        android:id="@+id/obstacles_layer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <LinearLayout
+        android:id="@+id/lives_layout"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/heart1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/heart"
+            android:contentDescription="@string/desc_heart"/>
+
+        <ImageView
+            android:id="@+id/heart2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/heart"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@string/desc_heart"/>
+
+        <ImageView
+            android:id="@+id/heart3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/heart"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@string/desc_heart"/>
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/player"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:src="@drawable/ball"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:contentDescription="@string/desc_player"/>
+
+
+    <ImageButton
+        android:id="@+id/button_left"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="32dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/arrow_left"
+        android:scaleType="fitCenter"
+        android:contentDescription="@string/desc_move_left" />
+
+
+    <ImageButton
+        android:id="@+id/button_right"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="32dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/arrow_right"
+        android:scaleType="fitCenter"
+        android:contentDescription="@string/desc_move_right"/>
+
+
+    <TextView
+        android:id="@+id/game_over_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/game_over"
+        android:textSize="48sp"
+        android:textColor="#B00000"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:textStyle="bold"
+        android:contentDescription="@string/game_over"/>
+
+</RelativeLayout>
