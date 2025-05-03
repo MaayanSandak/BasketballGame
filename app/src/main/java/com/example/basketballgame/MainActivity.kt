@@ -3,22 +3,23 @@ package com.example.basketballgame
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageView
 import com.example.basketballgame.config.Constants
 import com.example.basketballgame.logic.GameController
 import com.example.basketballgame.logic.GameListener
 import com.example.basketballgame.logic.GameTimer
 import com.example.basketballgame.utilities.SignalManager
+import com.google.android.material.button.MaterialButton
+import android.widget.RelativeLayout
 
 class MainActivity : AppCompatActivity(), GameListener {
 
-    private lateinit var player: ImageView
-    private lateinit var buttonLeft: ImageButton
-    private lateinit var buttonRight: ImageButton
-    private lateinit var hearts: Array<ImageView>
+    private lateinit var player: AppCompatImageView
+    private lateinit var buttonLeft: MaterialButton
+    private lateinit var buttonRight: MaterialButton
+    private lateinit var hearts: Array<AppCompatImageView>
     private lateinit var gameOverText: TextView
     private lateinit var obstaclesLayer: FrameLayout
 
@@ -32,7 +33,7 @@ class MainActivity : AppCompatActivity(), GameListener {
         SignalManager.init(this)
 
         initViews()
-        initGame()
+        startGame()
     }
 
     private fun initViews() {
@@ -58,24 +59,27 @@ class MainActivity : AppCompatActivity(), GameListener {
         }
     }
 
-    private fun initGame() {
+    private fun startGame() {
         gameController = GameController(this)
         gameTimer = GameTimer(Constants.TIMER_INTERVAL) {
             gameController.gameTick()
         }
-        player.post {
-            updatePlayerPosition()
-        }
+        SignalManager.getInstance().toast(getString(R.string.toast_new_game_started))
+        updatePlayerPosition()
         gameTimer.start()
     }
 
     private fun updatePlayerPosition() {
-        val screenWidth = resources.displayMetrics.widthPixels
-        val laneWidth = screenWidth / 3
+        player.post {
+            val screenWidth = resources.displayMetrics.widthPixels
+            val laneWidth = screenWidth / 3
 
-        val params = player.layoutParams as FrameLayout.LayoutParams
-        params.leftMargin = gameController.playerPosition * laneWidth + laneWidth / 2 - player.width / 2
-        player.layoutParams = params
+            val params = player.layoutParams as RelativeLayout.LayoutParams
+            val effectiveWidth = if (player.width > 0) player.width else laneWidth / 2
+
+            params.leftMargin = gameController.playerPosition * laneWidth + laneWidth / 2 - effectiveWidth / 2
+            player.layoutParams = params
+        }
     }
 
     override fun updateObstacles(matrix: Array<IntArray>) {
@@ -89,7 +93,7 @@ class MainActivity : AppCompatActivity(), GameListener {
         for (i in matrix.indices) {
             for (j in matrix[i].indices) {
                 if (matrix[i][j] == 1) {
-                    val obstacle = ImageView(this)
+                    val obstacle = AppCompatImageView(this)
                     obstacle.setImageResource(R.drawable.pin)
 
                     val params = FrameLayout.LayoutParams(laneWidth / 2, rowHeight / 2)
@@ -110,21 +114,11 @@ class MainActivity : AppCompatActivity(), GameListener {
     }
 
     private fun restartGame() {
-        SignalManager.getInstance().toast(getString(R.string.toast_new_game_started))
-
         gameOverText.visibility = View.GONE
-        gameController = GameController(this)
-        gameTimer = GameTimer(Constants.TIMER_INTERVAL) {
-            gameController.gameTick()
-        }
         updateLives(Constants.MAX_LIVES)
         obstaclesLayer.removeAllViews()
-        player.post {
-            updatePlayerPosition()
-        }
-        gameTimer.start()
+        startGame()
     }
-
 
     override fun gameOver(score: Int) {
         gameOverText.visibility = View.VISIBLE

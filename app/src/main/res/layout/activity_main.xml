@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/blue"
+    tools:context=".MainActivity">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/background_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,6 +21,16 @@
         android:layout_height="match_parent"
         android:background="#30FFFFFF" />
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/player"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
+        android:src="@drawable/ball"
+        android:contentDescription="@string/desc_player" />
+
+
     <FrameLayout
         android:id="@+id/obstacles_layer"
         android:layout_width="match_parent"
@@ -26,74 +41,74 @@
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|start"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
         android:padding="16dp">
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/heart1"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:src="@drawable/heart"
             android:contentDescription="@string/desc_heart" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/heart2"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/heart"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_marginStart="8dp"
+            android:src="@drawable/heart"
             android:contentDescription="@string/desc_heart" />
 
-        <ImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/heart3"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/heart"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_marginStart="8dp"
+            android:src="@drawable/heart"
             android:contentDescription="@string/desc_heart" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/player"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="60dp"
-        android:src="@drawable/ball"
-        android:contentDescription="@string/desc_player" />
-
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_left"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_gravity="bottom|start"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
         android:layout_margin="32dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/arrow_left"
-        android:scaleType="fitCenter"
+        android:text=""
+        android:backgroundTint="@android:color/transparent"
+        app:icon="@drawable/arrow_left"
+        app:iconGravity="textStart"
+        app:iconSize="48dp"
+        app:iconTint="@android:color/black"
         android:contentDescription="@string/desc_move_left" />
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_right"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_gravity="bottom|end"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:layout_margin="32dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/arrow_right"
-        android:scaleType="fitCenter"
+        android:text=""
+        android:backgroundTint="@android:color/transparent"
+        app:icon="@drawable/arrow_right"
+        app:iconGravity="textStart"
+        app:iconSize="48dp"
+        app:iconTint="@android:color/black"
         android:contentDescription="@string/desc_move_right" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/game_over_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/game_over"
         android:textSize="48sp"
-        android:textColor="#B00000"
-        android:layout_gravity="center"
-        android:visibility="gone"
         android:textStyle="bold"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:textColor="@color/red1"
         android:contentDescription="@string/game_over" />
 
-</FrameLayout>
+</RelativeLayout>
