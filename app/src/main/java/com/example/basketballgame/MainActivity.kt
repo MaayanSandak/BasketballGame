@@ -113,6 +113,11 @@ class MainActivity : AppCompatActivity(), GameListener {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        gameTimer.stop()
+    }
+
     private fun restartGame() {
         gameOverText.visibility = View.GONE
         updateLives(Constants.MAX_LIVES)
