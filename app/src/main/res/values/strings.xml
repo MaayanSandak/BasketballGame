@@ -10,5 +10,6 @@
     <string name="toast_new_game_started">New Game Started!</string>
     <string name="game_over">Game Over</string>
     <string name="toast_lost_life">You lose the ball!</string>
+    <string name="desc_score">Current score</string>
 </resources>
 

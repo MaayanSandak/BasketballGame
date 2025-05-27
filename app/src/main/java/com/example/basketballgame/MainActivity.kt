@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity(), GameListener {
     private lateinit var hearts: Array<AppCompatImageView>
     private lateinit var gameOverText: TextView
     private lateinit var obstaclesLayer: FrameLayout
+    private lateinit var scoreText: TextView
 
     private lateinit var gameTimer: GameTimer
     private lateinit var gameController: GameController
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity(), GameListener {
         buttonRight = findViewById(R.id.button_right)
         gameOverText = findViewById(R.id.game_over_text)
         obstaclesLayer = findViewById(R.id.obstacles_layer)
+        scoreText = findViewById(R.id.score_text)
 
         hearts = arrayOf(
             findViewById(R.id.heart1),
@@ -60,9 +62,10 @@ class MainActivity : AppCompatActivity(), GameListener {
     }
 
     private fun startGame() {
-        gameController = GameController(this)
+        gameController = GameController(this, this)
         gameTimer = GameTimer(Constants.TIMER_INTERVAL) {
             gameController.gameTick()
+            updateScore(gameController.score)
         }
         SignalManager.getInstance().toast(getString(R.string.toast_new_game_started))
         updatePlayerPosition()
@@ -92,19 +95,31 @@ class MainActivity : AppCompatActivity(), GameListener {
 
         for (i in matrix.indices) {
             for (j in matrix[i].indices) {
-                if (matrix[i][j] == 1) {
-                    val obstacle = AppCompatImageView(this)
-                    obstacle.setImageResource(R.drawable.pin)
+                val drawableRes = when (matrix[i][j]) {
+                    Constants.OBJECT_OBSTACLE -> R.drawable.pin
+                    Constants.OBJECT_HOOP -> R.drawable.hoop
+                    Constants.OBJECT_HEART -> R.drawable.heart
+                    else -> null
+                }
 
-                    val obstacleWidth = (laneWidth * 2) / 3
-                    val obstacleHeight = (rowHeight * 2) / 3
-                    val params = FrameLayout.LayoutParams(obstacleWidth, obstacleHeight)
+                if (drawableRes != null) {
+                    val itemView = AppCompatImageView(this)
+                    itemView.setImageResource(drawableRes)
 
-                    params.leftMargin = j * laneWidth + laneWidth / 2 - obstacleWidth / 2
-                    params.topMargin = i * rowHeight + rowHeight / 2 - obstacleHeight / 2
+                    val (itemWidth, itemHeight) = when (matrix[i][j]) {
+                        Constants.OBJECT_HOOP -> Pair(laneWidth * 5 / 6, rowHeight * 5 / 6)
+                        Constants.OBJECT_OBSTACLE -> Pair(laneWidth * 4 / 5, rowHeight * 4 / 5)
+                        Constants.OBJECT_HEART -> Pair((laneWidth * 2) / 3, (rowHeight * 2) / 3)
+                        else -> Pair((laneWidth * 2) / 3, (rowHeight * 2) / 3)
+                    }
 
-                    obstacle.layoutParams = params
-                    obstaclesLayer.addView(obstacle)
+                    val params = FrameLayout.LayoutParams(itemWidth, itemHeight)
+
+                    params.leftMargin = j * laneWidth + laneWidth / 2 - itemWidth / 2
+                    params.topMargin = i * rowHeight + rowHeight / 2 - itemHeight / 2
+
+                    itemView.layoutParams = params
+                    obstaclesLayer.addView(itemView)
                 }
             }
         }
@@ -116,6 +131,10 @@ class MainActivity : AppCompatActivity(), GameListener {
         }
     }
 
+    private fun updateScore(score: Int) {
+        scoreText.text = "Score: $score"
+    }
+
     override fun onPause() {
         super.onPause()
         gameTimer.stop()
@@ -125,6 +144,7 @@ class MainActivity : AppCompatActivity(), GameListener {
         gameOverText.visibility = View.GONE
         updateLives(Constants.MAX_LIVES)
         obstaclesLayer.removeAllViews()
+        updateScore(0)
         startGame()
     }
 

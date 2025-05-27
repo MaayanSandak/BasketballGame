@@ -52,6 +52,25 @@ class GameManager(
         matrix[0][col] = 1
     }
 
+    fun addNewHoop() {
+        val col = (0 until cols).random()
+        matrix[0][col] = 2
+    }
+
+    fun addNewHeart() {
+        if (lives < maxLives) {
+            val col = (0 until cols).random()
+            matrix[0][col] = 3
+        }
+    }
+
+    fun addLife() {
+        if (lives < maxLives) {
+            lives++
+        }
+    }
+
+
     fun checkCollision(playerPosition: Int): Boolean {
         if (rows < 1) return false
         return matrix[rows - 1][playerPosition] == 1

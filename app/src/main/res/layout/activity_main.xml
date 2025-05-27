@@ -30,7 +30,6 @@
         android:src="@drawable/ball"
         android:contentDescription="@string/desc_player" />
 
-
     <FrameLayout
         android:id="@+id/obstacles_layer"
         android:layout_width="match_parent"
@@ -68,6 +67,19 @@
             android:src="@drawable/heart"
             android:contentDescription="@string/desc_heart" />
     </LinearLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/score_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Score: 0"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/desc_score" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_left"
