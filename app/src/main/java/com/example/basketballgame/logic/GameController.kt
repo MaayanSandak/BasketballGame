@@ -11,7 +11,7 @@ class GameController(
 ) {
     private val gameManager = GameManager(rows, cols, maxLives)
 
-    var playerPosition: Int = 1
+    var playerPosition: Int = cols / 2
     private var lastCollision = false
 
 

@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity(), GameListener {
     private fun updatePlayerPosition() {
         player.post {
             val screenWidth = resources.displayMetrics.widthPixels
-            val laneWidth = screenWidth / 3
+            val laneWidth = screenWidth / Constants.COLS
 
             val params = player.layoutParams as RelativeLayout.LayoutParams
             val effectiveWidth = if (player.width > 0) player.width else laneWidth / 2
@@ -87,8 +87,8 @@ class MainActivity : AppCompatActivity(), GameListener {
 
         val screenWidth = resources.displayMetrics.widthPixels
         val screenHeight = resources.displayMetrics.heightPixels
-        val laneWidth = screenWidth / 3
-        val rowHeight = screenHeight / 5
+        val laneWidth = screenWidth / Constants.COLS
+        val rowHeight = screenHeight / Constants.ROWS
 
         for (i in matrix.indices) {
             for (j in matrix[i].indices) {
@@ -96,9 +96,12 @@ class MainActivity : AppCompatActivity(), GameListener {
                     val obstacle = AppCompatImageView(this)
                     obstacle.setImageResource(R.drawable.pin)
 
-                    val params = FrameLayout.LayoutParams(laneWidth / 2, rowHeight / 2)
-                    params.leftMargin = j * laneWidth + laneWidth / 2 - (laneWidth / 4)
-                    params.topMargin = i * rowHeight + rowHeight / 2 - (rowHeight / 4)
+                    val obstacleWidth = (laneWidth * 2) / 3
+                    val obstacleHeight = (rowHeight * 2) / 3
+                    val params = FrameLayout.LayoutParams(obstacleWidth, obstacleHeight)
+
+                    params.leftMargin = j * laneWidth + laneWidth / 2 - obstacleWidth / 2
+                    params.topMargin = i * rowHeight + rowHeight / 2 - obstacleHeight / 2
 
                     obstacle.layoutParams = params
                     obstaclesLayer.addView(obstacle)
