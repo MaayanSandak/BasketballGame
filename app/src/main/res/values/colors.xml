@@ -8,4 +8,6 @@
     <color name="red1">#B00000</color>
     <color name="text_color">#FFFFFF</color>
     <color name="transparent">#00000000</color>
+    <color name="button_background">#90CAF9</color>
 </resources>
+

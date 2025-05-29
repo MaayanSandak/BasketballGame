@@ -1,18 +1,28 @@
 package com.example.basketballgame
 
+import HighScoresActivity
+import android.content.Intent
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import com.example.basketballgame.config.Constants
+import com.example.basketballgame.config.ControlMode
 import com.example.basketballgame.logic.GameController
 import com.example.basketballgame.logic.GameListener
 import com.example.basketballgame.logic.GameTimer
+import com.example.basketballgame.models.HighScore
+import com.example.basketballgame.utilities.EnterNameDialog
+import com.example.basketballgame.utilities.HighScoresManager
 import com.example.basketballgame.utilities.SignalManager
 import com.google.android.material.button.MaterialButton
-import android.widget.RelativeLayout
 
 class MainActivity : AppCompatActivity(), GameListener {
 
@@ -26,6 +36,12 @@ class MainActivity : AppCompatActivity(), GameListener {
 
     private lateinit var gameTimer: GameTimer
     private lateinit var gameController: GameController
+    private lateinit var controlMode: ControlMode
+
+    private var sensorManager: SensorManager? = null
+    private var accelerometer: Sensor? = null
+    private var sensorListener: SensorEventListener? = null
+    private var lastTiltTime = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +50,14 @@ class MainActivity : AppCompatActivity(), GameListener {
         SignalManager.init(this)
 
         initViews()
+
+        val modeString = intent.getStringExtra("control_mode")
+        controlMode = ControlMode.valueOf(modeString ?: ControlMode.BUTTONS_SLOW.name)
+
+        if (controlMode == ControlMode.TILT) {
+            setupTiltControls()
+        }
+
         startGame()
     }
 
@@ -59,14 +83,57 @@ class MainActivity : AppCompatActivity(), GameListener {
             gameController.movePlayerRight()
             updatePlayerPosition()
         }
+
+        if (controlMode == ControlMode.TILT) {
+            buttonLeft.visibility = View.GONE
+            buttonRight.visibility = View.GONE
+        }
+    }
+
+    private fun setupTiltControls() {
+        sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
+        sensorListener = object : SensorEventListener {
+            override fun onSensorChanged(event: SensorEvent) {
+                val x = event.values[0]
+                val currentTime = System.currentTimeMillis()
+                if (currentTime - lastTiltTime > 300) {
+                    if (x > 3) {
+                        gameController.movePlayerLeft()
+                        updatePlayerPosition()
+                    } else if (x < -3) {
+                        gameController.movePlayerRight()
+                        updatePlayerPosition()
+                    }
+                    lastTiltTime = currentTime
+                }
+            }
+
+            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+        }
+
+        accelerometer?.let {
+            sensorManager?.registerListener(sensorListener, it, SensorManager.SENSOR_DELAY_GAME)
+        }
     }
 
     private fun startGame() {
+        val interval = when (controlMode) {
+            ControlMode.BUTTONS_FAST -> 250L
+            ControlMode.BUTTONS_SLOW -> Constants.TIMER_INTERVAL
+            ControlMode.TILT -> Constants.TIMER_INTERVAL
+        }
+
         gameController = GameController(this, this)
-        gameTimer = GameTimer(Constants.TIMER_INTERVAL) {
+        gameTimer = GameTimer(interval) {
             gameController.gameTick()
             updateScore(gameController.score)
+            if (gameController.isGameOver()) {
+                gameTimer.stop()
+            }
         }
+
         SignalManager.getInstance().toast(getString(R.string.toast_new_game_started))
         updatePlayerPosition()
         gameTimer.start()
@@ -76,10 +143,8 @@ class MainActivity : AppCompatActivity(), GameListener {
         player.post {
             val screenWidth = resources.displayMetrics.widthPixels
             val laneWidth = screenWidth / Constants.COLS
-
             val params = player.layoutParams as RelativeLayout.LayoutParams
             val effectiveWidth = if (player.width > 0) player.width else laneWidth / 2
-
             params.leftMargin = gameController.playerPosition * laneWidth + laneWidth / 2 - effectiveWidth / 2
             player.layoutParams = params
         }
@@ -87,7 +152,6 @@ class MainActivity : AppCompatActivity(), GameListener {
 
     override fun updateObstacles(matrix: Array<IntArray>) {
         obstaclesLayer.removeAllViews()
-
         val screenWidth = resources.displayMetrics.widthPixels
         val screenHeight = resources.displayMetrics.heightPixels
         val laneWidth = screenWidth / Constants.COLS
@@ -105,19 +169,15 @@ class MainActivity : AppCompatActivity(), GameListener {
                 if (drawableRes != null) {
                     val itemView = AppCompatImageView(this)
                     itemView.setImageResource(drawableRes)
-
                     val (itemWidth, itemHeight) = when (matrix[i][j]) {
                         Constants.OBJECT_HOOP -> Pair(laneWidth * 5 / 6, rowHeight * 5 / 6)
                         Constants.OBJECT_OBSTACLE -> Pair(laneWidth * 4 / 5, rowHeight * 4 / 5)
                         Constants.OBJECT_HEART -> Pair((laneWidth * 2) / 3, (rowHeight * 2) / 3)
                         else -> Pair((laneWidth * 2) / 3, (rowHeight * 2) / 3)
                     }
-
                     val params = FrameLayout.LayoutParams(itemWidth, itemHeight)
-
                     params.leftMargin = j * laneWidth + laneWidth / 2 - itemWidth / 2
                     params.topMargin = i * rowHeight + rowHeight / 2 - itemHeight / 2
-
                     itemView.layoutParams = params
                     obstaclesLayer.addView(itemView)
                 }
@@ -138,22 +198,26 @@ class MainActivity : AppCompatActivity(), GameListener {
     override fun onPause() {
         super.onPause()
         gameTimer.stop()
-    }
-
-    private fun restartGame() {
-        gameOverText.visibility = View.GONE
-        updateLives(Constants.MAX_LIVES)
-        obstaclesLayer.removeAllViews()
-        updateScore(0)
-        startGame()
+        if (controlMode == ControlMode.TILT) {
+            sensorManager?.unregisterListener(sensorListener)
+        }
     }
 
     override fun gameOver(score: Int) {
         gameOverText.visibility = View.VISIBLE
         gameTimer.stop()
 
-        gameOverText.postDelayed({
-            restartGame()
-        }, 3000)
+        val location = SignalManager.getInstance().getLastKnownLocation()
+
+        EnterNameDialog.show(this) { name ->
+            if (location != null) {
+                val highScore = HighScore(name, score, location.latitude, location.longitude)
+                HighScoresManager.saveScore(this, highScore)
+            }
+
+            val intent = Intent(this, HighScoresActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 }

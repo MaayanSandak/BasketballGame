@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_menu"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainMenuActivity">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/background_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/basketball_court"
+        android:contentDescription="@string/desc_background" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#30FFFFFF" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/menu_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="55dp"
+        android:textColor="@color/black" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_buttons_fast"
+        style="@style/MenuButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/menu_title"
+        android:layout_marginTop="10dp"
+        android:text="@string/button_fast" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_buttons_slow"
+        style="@style/MenuButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_buttons_fast"
+        android:layout_marginTop="10dp"
+        android:text="@string/button_slow" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_tilt"
+        style="@style/MenuButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_buttons_slow"
+        android:layout_marginTop="10dp"
+        android:text="@string/tilt" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_high_scores"
+        style="@style/MenuButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_tilt"
+        android:layout_marginTop="10dp"
+        android:text="@string/high_score_table" />
+
+</RelativeLayout>

@@ -11,5 +11,10 @@
     <string name="game_over">Game Over</string>
     <string name="toast_lost_life">You lose the ball!</string>
     <string name="desc_score">Current score</string>
+    <string name="game_name">Basketball Game</string>
+    <string name="button_fast">Play with Buttons (Fast)</string>
+    <string name="button_slow">Play with Buttons (Slow)</string>
+    <string name="high_score_table">HighScore table</string>
+    <string name="tilt">Play with Tilt</string>
 </resources>
 

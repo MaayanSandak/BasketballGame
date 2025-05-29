@@ -67,4 +67,9 @@ class GameController(
             playerPosition++
         }
     }
+
+    fun isGameOver(): Boolean {
+        return gameManager.isGameOver
+    }
+
 }

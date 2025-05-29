@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/high_scores_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <!-- פרגמנט של הטבלה -->
+    <fragment
+        android:id="@+id/high_scores_list_fragment"
+        android:name="com.example.basketballgame.fragments.HighScoresListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- פרגמנט של המפה -->
+    <fragment
+        android:id="@+id/high_scores_map_fragment"
+        android:name="com.example.basketballgame.fragments.HighScoresMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- כפתור חזרה לתפריט הראשי -->
+    <Button
+        android:id="@+id/btn_main_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Back to Main Menu" />
+</LinearLayout>
