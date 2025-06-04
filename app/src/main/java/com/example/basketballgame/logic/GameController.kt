@@ -15,11 +15,16 @@ class GameController(
 ) {
     private val gameManager = GameManager(rows, cols, maxLives)
 
+    var distance: Int = 0
+        private set
+
     var playerPosition: Int = cols / 2
     var score: Int = 0
         private set
 
     fun gameTick() {
+        distance++
+
         gameManager.clearLastRow()
         gameManager.moveObstaclesDown()
 

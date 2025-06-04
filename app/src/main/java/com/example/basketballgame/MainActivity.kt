@@ -1,6 +1,5 @@
 package com.example.basketballgame
 
-import com.example.basketballgame.HighScoresActivity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Sensor
@@ -43,6 +42,8 @@ class MainActivity : AppCompatActivity(), GameListener {
     private var accelerometer: Sensor? = null
     private var sensorListener: SensorEventListener? = null
     private var lastTiltTime = 0L
+    private var smoothedX = 0f
+    private var lastSpeedLevel = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,8 +103,6 @@ class MainActivity : AppCompatActivity(), GameListener {
         }
     }
 
-    private var smoothedX = 0f
-
     private fun setupTiltControls() {
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
@@ -111,13 +110,14 @@ class MainActivity : AppCompatActivity(), GameListener {
         sensorListener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
                 val rawX = event.values[0]
+                val rawY = event.values[1]
                 val currentTime = System.currentTimeMillis()
 
                 val alpha = 0.8f
                 smoothedX = alpha * smoothedX + (1 - alpha) * rawX
 
                 if (currentTime - lastTiltTime > 200) {
-                    val sensitivity = 2.0f
+                    val sensitivity = 2.5f
 
                     if (smoothedX > sensitivity) {
                         gameController.movePlayerLeft()
@@ -128,6 +128,23 @@ class MainActivity : AppCompatActivity(), GameListener {
                     }
 
                     lastTiltTime = currentTime
+                }
+
+                val speedLevel = when {
+                    rawY < 3 -> 0
+                    rawY > 7 -> 2
+                    else -> 1
+                }
+
+                if (speedLevel != lastSpeedLevel) {
+                    val newInterval = when (speedLevel) {
+                        0 -> 400L
+                        1 -> 550L
+                        2 -> 750L
+                        else -> 550L
+                    }
+                    gameTimer.updateInterval(newInterval)
+                    lastSpeedLevel = speedLevel
                 }
             }
 

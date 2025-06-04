@@ -4,7 +4,7 @@ import android.os.Handler
 import android.os.Looper
 
 class GameTimer(
-    private val interval: Long,
+    private var interval: Long,
     private val onTick: () -> Unit
 ) {
     private val handler = Handler(Looper.getMainLooper())
@@ -29,5 +29,9 @@ class GameTimer(
     fun stop() {
         isRunning = false
         handler.removeCallbacks(runnable)
+    }
+
+    fun updateInterval(newInterval: Long) {
+        interval = newInterval
     }
 }
