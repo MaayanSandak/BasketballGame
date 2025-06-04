@@ -57,15 +57,11 @@ class GameController(
     }
 
     fun movePlayerLeft() {
-        if (playerPosition > 0) {
-            playerPosition--
-        }
+        if (playerPosition > 0) playerPosition--
     }
 
     fun movePlayerRight() {
-        if (playerPosition < cols - 1) {
-            playerPosition++
-        }
+        if (playerPosition < cols - 1) playerPosition++
     }
 
     fun isGameOver(): Boolean {

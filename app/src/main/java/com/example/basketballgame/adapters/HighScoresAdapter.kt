@@ -22,7 +22,7 @@ class HighScoresAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ScoreViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_score, parent, false)
+            .inflate(R.layout.item_high_score, parent, false)
         return ScoreViewHolder(view)
     }
 

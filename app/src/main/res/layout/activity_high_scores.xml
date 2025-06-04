@@ -1,30 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/high_scores_layout"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_high_scores"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".HighScoresActivity">
 
-    <!-- פרגמנט של הטבלה -->
-    <fragment
-        android:id="@+id/high_scores_list_fragment"
-        android:name="com.example.basketballgame.fragments.HighScoresListFragment"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_scores_list"
+        android:name="com.example.basketballgame.fragments.ScoresListFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <!-- פרגמנט של המפה -->
-    <fragment
-        android:id="@+id/high_scores_map_fragment"
-        android:name="com.example.basketballgame.fragments.HighScoresMapFragment"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <!-- כפתור חזרה לתפריט הראשי -->
     <Button
-        android:id="@+id/btn_main_menu"
+        android:id="@+id/button_back_to_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Back to Main Menu" />
+        android:text="@string/menu"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/purple_500"
+        android:textColor="@android:color/white" />
+
 </LinearLayout>

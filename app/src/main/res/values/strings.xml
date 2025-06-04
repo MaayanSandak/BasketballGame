@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Basketball Game</string>
-
+    <string name="menu">back to menu</string>
     <string name="desc_move_left">Move left</string>
     <string name="desc_move_right">Move right</string>
     <string name="desc_heart">Heart icon representing a life</string>
@@ -16,5 +16,8 @@
     <string name="button_slow">Play with Buttons (Slow)</string>
     <string name="high_score_table">HighScore table</string>
     <string name="tilt">Play with Tilt</string>
+    <string name="score_name_placeholder">Name</string>
+    <string name="score_value_placeholder">Score</string>
+    <string name="location_button_description">Show location on map</string>
 </resources>
 

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="12dp"
+    android:padding="16dp"
     android:background="@android:color/white"
     android:gravity="center_vertical">
 
@@ -12,25 +13,27 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:text="Name"
+        android:text="@string/score_name_placeholder"
         android:textStyle="bold"
         android:textColor="@android:color/black"
-        android:textSize="16sp" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/score_value"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Score: 0"
-        android:textColor="@android:color/black"
-        android:textSize="14sp" />
+        android:text="@string/score_value_placeholder"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="18sp"
+        android:gravity="center" />
 
     <ImageButton
         android:id="@+id/btn_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:src="@android:drawable/ic_menu_mylocation"
         android:background="@android:color/transparent"
-        android:contentDescription="Location" />
+        android:contentDescription="@string/location_button_description"
+        app:tint="@color/holo_blue" />
 </LinearLayout>

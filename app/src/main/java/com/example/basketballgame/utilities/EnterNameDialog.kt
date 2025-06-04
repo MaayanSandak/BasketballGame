@@ -1,8 +1,11 @@
 package com.example.basketballgame.utilities
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.widget.EditText
+import com.example.basketballgame.MainMenuActivity
 
 object EnterNameDialog {
     fun show(context: Context, onNameEntered: (String) -> Unit) {
@@ -17,7 +20,11 @@ object EnterNameDialog {
                     onNameEntered(name)
                 }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("Cancel") { _, _ ->
+                val intent = Intent(context, MainMenuActivity::class.java)
+                context.startActivity(intent)
+                if (context is Activity) context.finish()
+            }
             .show()
     }
 }

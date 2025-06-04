@@ -1,7 +1,8 @@
 package com.example.basketballgame
 
-import HighScoresActivity
+import com.example.basketballgame.HighScoresActivity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -48,17 +49,28 @@ class MainActivity : AppCompatActivity(), GameListener {
         setContentView(R.layout.activity_main)
 
         SignalManager.init(this)
-
-        initViews()
+        requestLocationPermission()
 
         val modeString = intent.getStringExtra("control_mode")
         controlMode = ControlMode.valueOf(modeString ?: ControlMode.BUTTONS_SLOW.name)
+
+        initViews()
 
         if (controlMode == ControlMode.TILT) {
             setupTiltControls()
         }
 
         startGame()
+    }
+
+    private fun requestLocationPermission() {
+        if (checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+            PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                1001
+            )
+        }
     }
 
     private fun initViews() {
@@ -121,8 +133,8 @@ class MainActivity : AppCompatActivity(), GameListener {
     private fun startGame() {
         val interval = when (controlMode) {
             ControlMode.BUTTONS_FAST -> 250L
-            ControlMode.BUTTONS_SLOW -> Constants.TIMER_INTERVAL
-            ControlMode.TILT -> Constants.TIMER_INTERVAL
+            ControlMode.BUTTONS_SLOW -> 400L
+            ControlMode.TILT -> 250L
         }
 
         gameController = GameController(this, this)
@@ -207,17 +219,17 @@ class MainActivity : AppCompatActivity(), GameListener {
         gameOverText.visibility = View.VISIBLE
         gameTimer.stop()
 
-        val location = SignalManager.getInstance().getLastKnownLocation()
+        SignalManager.getInstance().fetchLocation { location ->
+            EnterNameDialog.show(this) { name ->
+                if (location != null) {
+                    val highScore = HighScore(name, score, location.latitude, location.longitude)
+                    HighScoresManager.saveScore(this, highScore)
+                }
 
-        EnterNameDialog.show(this) { name ->
-            if (location != null) {
-                val highScore = HighScore(name, score, location.latitude, location.longitude)
-                HighScoresManager.saveScore(this, highScore)
+                val intent = Intent(this, HighScoresActivity::class.java)
+                startActivity(intent)
+                finish()
             }
-
-            val intent = Intent(this, HighScoresActivity::class.java)
-            startActivity(intent)
-            finish()
         }
     }
 }

@@ -9,5 +9,9 @@
     <color name="text_color">#FFFFFF</color>
     <color name="transparent">#00000000</color>
     <color name="button_background">#90CAF9</color>
+    <color name="purple_500">#673AB7</color>
+    <color name="holo_blue">#ff0099cc</color>
 </resources>
+
+
 
