@@ -11,8 +11,6 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
 
 class SignalManager private constructor(private val context: Context) {
 

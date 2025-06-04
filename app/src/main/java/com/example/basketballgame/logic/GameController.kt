@@ -37,7 +37,7 @@ class GameController(
                 return
             }
         } else if (item == Constants.OBJECT_HOOP) {
-            score++
+            score += 2
             SignalManager.getInstance().toast("Scored!")
             MediaPlayer.create(context, R.raw.score).start()
         } else if (item == Constants.OBJECT_HEART) {

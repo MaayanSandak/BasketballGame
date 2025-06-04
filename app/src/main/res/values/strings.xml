@@ -14,7 +14,7 @@
     <string name="game_name">Basketball Game</string>
     <string name="button_fast">Play with Buttons (Fast)</string>
     <string name="button_slow">Play with Buttons (Slow)</string>
-    <string name="high_score_table">HighScore table</string>
+    <string name="high_score_table">High Score table</string>
     <string name="tilt">Play with Tilt</string>
     <string name="score_name_placeholder">Name</string>
     <string name="score_value_placeholder">Score</string>

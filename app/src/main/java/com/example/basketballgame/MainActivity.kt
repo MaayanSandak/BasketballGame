@@ -102,22 +102,31 @@ class MainActivity : AppCompatActivity(), GameListener {
         }
     }
 
+    private var smoothedX = 0f
+
     private fun setupTiltControls() {
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 
         sensorListener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
-                val x = event.values[0]
+                val rawX = event.values[0]
                 val currentTime = System.currentTimeMillis()
-                if (currentTime - lastTiltTime > 300) {
-                    if (x > 3) {
+
+                val alpha = 0.8f
+                smoothedX = alpha * smoothedX + (1 - alpha) * rawX
+
+                if (currentTime - lastTiltTime > 200) {
+                    val sensitivity = 2.0f
+
+                    if (smoothedX > sensitivity) {
                         gameController.movePlayerLeft()
                         updatePlayerPosition()
-                    } else if (x < -3) {
+                    } else if (smoothedX < -sensitivity) {
                         gameController.movePlayerRight()
                         updatePlayerPosition()
                     }
+
                     lastTiltTime = currentTime
                 }
             }
@@ -132,9 +141,9 @@ class MainActivity : AppCompatActivity(), GameListener {
 
     private fun startGame() {
         val interval = when (controlMode) {
-            ControlMode.BUTTONS_FAST -> 250L
-            ControlMode.BUTTONS_SLOW -> 400L
-            ControlMode.TILT -> 250L
+            ControlMode.BUTTONS_FAST -> 400L
+            ControlMode.BUTTONS_SLOW -> 750L
+            ControlMode.TILT -> 550L
         }
 
         gameController = GameController(this, this)
